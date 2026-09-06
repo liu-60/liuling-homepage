@@ -1,4 +1,8 @@
 export const paths: Record<string, string> = {
+  x: '<path d="M4 3h4l12 18h-4zM20 3l-7 8M4 21l7-8"/>',
+  xiaohongshu: '<path d="M5 6v12M2 10l-1 5M8 10l1 5M12 7l-2 5h5M11 15h4M10 18h6M17 7h6M20 4v16M16 12h7v6h-2"/>',
+  wechat: '<path d="M15 10c0-4-3-6-7-6S1 6 1 10c0 2 1 4 3 5l-1 3 4-2h2M23 15c0-3-3-5-6-5s-6 2-6 5 3 5 6 5h2l3 2-1-3c1-1 2-2 2-4Z"/><path d="M5 9h.01M10 9h.01M15 14h.01M19 14h.01"/>',
+  mail: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-8H9v8H4a1 1 0 0 1-1-1z"/>',
   folder: '<path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   briefcase: '<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3M8 7v14M16 7v14"/>',

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { escapeHtml, safeUrl, renderSocials, renderMetrics } from '../src/render.ts';
+import { escapeHtml, safeUrl, renderSocials, renderMetrics, renderContact, renderPage } from '../src/render.ts';
+import { existsSync, readFileSync } from 'node:fs';
 
 test('text and attribute values cannot inject markup', () => {
   assert.equal(escapeHtml('<script>"a" & \'b\'</script>'), '&lt;script&gt;&quot;a&quot; &amp; &#39;b&#39;&lt;/script&gt;');
@@ -33,4 +34,27 @@ test('unconfirmed or invalid numeric claims are suppressed', () => {
   assert.equal(renderMetrics([{value:12,label:'Projects',source:''}]), '');
   assert.equal(renderMetrics([{value:-1,label:'Projects',source:'confirmed'}]), '');
   assert.equal(renderMetrics([{value:Infinity,label:'Projects',source:'confirmed'}]), '');
+});
+
+test('explicit pending brands are labelled without dead links or focusable buttons', () => {
+  const html = renderSocials([{label:'微信',icon:'wechat',url:'',pending:true}]);
+  assert.match(html, /微信 · link pending/);
+  assert.doesNotMatch(html, /<a\b|<button\b|tabindex/);
+  assert.equal(renderSocials([{label:'X',icon:'x',url:'javascript:alert(1)',pending:true}]), '');
+});
+
+test('email rail requires an explicit safe public address', () => {
+  assert.equal(renderContact(null), '');
+  assert.equal(renderContact('person@example.com?bcc=other@example.com'), '');
+  assert.equal(renderContact('person@example.com\nBcc:other@example.com'), '');
+  assert.match(renderContact('hello@example.com'), /href="mailto:hello@example.com"/);
+});
+
+test('all portrait and brand assets exist locally and favicon is genuine ICO', () => {
+  const html = Object.values(renderPage()).join('');
+  const images = [...html.matchAll(/src="(\/[^" ]+)"/g)].map(match=>match[1]);
+  assert.equal(images.length, 11);
+  images.forEach(path=>assert.ok(existsSync(new URL(`../public${path}`, import.meta.url)), path));
+  assert.deepEqual([...readFileSync(new URL('../public/favicon.ico',import.meta.url)).subarray(0,4)], [0,0,1,0]);
+  assert.equal(renderPage().CONTACT, '');
 });
