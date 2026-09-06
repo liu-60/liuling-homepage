@@ -1,6 +1,6 @@
-# Liu Ling · Portfolio V3
+# Liu Ling · Portfolio V4
 
-Lightweight static portfolio built with Vite, TypeScript and CSS.
+Static portfolio built with Vite, TypeScript and CSS, with lazy Preact islands for three Originkit effects.
 
 ## Run
 
@@ -8,10 +8,10 @@ Lightweight static portfolio built with Vite, TypeScript and CSS.
 
 ## Content and assets
 
-Edit `src/content.ts`. Content renders into HTML at build time; reading, anchors and case disclosures work without JavaScript.
+Edit `src/content.ts`. Content renders into HTML at build time. Navigation opens independent static pages; content and native links remain available without JavaScript.
 
 - Portrait: approved illustrated avatar in two responsive WebP sizes, plus matching favicon.ico and apple-touch-icon.png. Set `profile.portrait` to another approved `/images/name.webp` to replace.
-- Projects: replace `image` with an approved local file; set `url` only for a real public HTTPS case. Defaults remain generic SVG artwork and inline role/challenge/solution details.
+- Projects: replace `image` with an approved local file; set `url` only for a real public HTTPS case. Defaults remain generic SVG artwork, with role/challenge/solution details on individual project pages.
 - Socials: add `{ label, icon, url }`. Icons: github, x, xiaohongshu, wechat. An explicitly requested platform with `pending:true` and an empty URL is a labelled, non-interactive icon. Set its real HTTPS URL and remove pending when supplied. Invalid URLs never become links. GitHub uses the resume's public liu-60 account.
 - Contact: `contactEmail:null` until the owner confirms a public address. A valid address creates a fixed vertical email on large desktop and an inline link on smaller screens.
 - Software and skills: official local marks live in `public/brands/`; provenance is recorded in `docs/brand-assets.md`.
@@ -21,4 +21,6 @@ Keep salary, raw resumes and non-public work materials outside this directory. P
 
 ## Motion
 
-CSS + IntersectionObserver + Web Animations, no animation library. Content remains visible without JavaScript. Entries run once within the V2 timing budget; skill icons receive a small additional entrance. The custom arrow changes to a lime action ring over links. It is limited to a fine mouse pointer, disabled on keyboard use, touch and reduced-motion preference, and schedules no frames at rest. Scroll progress uses passive events and one pending frame. Reduced-motion removes transitions and smooth scrolling; native links and project disclosures remain usable.
+Originkit Fluid Text, Beyond Horizon and Glitter Wrap use their original shader/particle implementations with bounded rendering budgets. Effects load lazily and unmount offscreen, when the page is hidden, or under reduced motion. Fluid text stops after pointer inactivity. Semantic text and a static footer gradient remain as fallbacks.
+
+Desktop keeps the profile fixed; right-side modules fade at viewport edges. Touch layouts use a normal-flow profile. Hoverable items brighten and lift slightly. The custom cursor is restricted to fine pointers and yields to keyboard use and reduced motion. See `docs/originkit-integration.md` and `docs/acceptance-v4.md`.

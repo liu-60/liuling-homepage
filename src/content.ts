@@ -43,3 +43,5 @@ export const software = [
   {title:'Tencent Cloud',note:'Cloud infrastructure',brand:'tencent-cloud.png',url:'https://cloud.tencent.com/'},
   {title:'Figma',note:'Design & prototyping',brand:'figma.svg',url:'https://www.figma.com/'},
 ];
+
+export const projectPaths = ['/work/test-delivery.html','/work/travel.html','/work/education.html'];
