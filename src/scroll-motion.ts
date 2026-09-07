@@ -12,13 +12,14 @@ export function setupModuleMotion(reduced: MotionPreference) {
   const update=()=>{
     frame=0;
     modules.forEach(element=>{
-      if(reduced.matches){element.style.removeProperty('--module-opacity');element.style.removeProperty('--module-offset');return}
+      if(reduced.matches){element.style.removeProperty('--module-opacity');element.style.removeProperty('--module-offset');element.classList.remove('is-in-view');return}
       const rect=element.getBoundingClientRect();
       // Offset is applied to an inner visual via CSS translate, not document flow.
       const previous = parseFloat(element.style.getPropertyValue('--module-offset')) || 0;
       const {opacity,offset}=moduleVisibility(rect.top-previous,rect.bottom-previous,innerHeight);
       element.style.setProperty('--module-opacity',String(opacity));
       element.style.setProperty('--module-offset',`${offset}px`);
+      element.classList.toggle('is-in-view',opacity>0);
     });
   };
   const schedule=()=>{if(!frame)frame=requestAnimationFrame(update)};

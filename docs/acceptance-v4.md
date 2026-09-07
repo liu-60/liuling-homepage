@@ -1,5 +1,11 @@
 # V4 local acceptance
 
+## Latest shape and border pass
+
+The footer now has a CSS fallback deformation that starts when the module enters the viewport, so the initial state is visible before the desktop pointer enters. Beyond Horizon still mounts on desktop pointer entry and unmounts on leave. A restrained orange border transitions from transparent on hover; the same border transition is applied to Work, experience, skill and qualification cards. The heading link remains transparent on hover.
+
+Browser checks: footer `is-in-view` and `horizon-deform` were observed at desktop and 375 px content width; effect width matched the viewport with no horizontal overflow. Work hover reached `border-color: rgba(255, 113, 61, .5)` and `translateY(-3px)`. Footer hover reached `border-color: rgba(255, 113, 61, .75)` and mounted a ready shader canvas. 18 tests and the production build pass.
+
 ## Full-width sunrise and hover refinement
 
 - Navigation and its glyph keep transform `none` on hover. Work cards transition background and transform over 240 ms.
