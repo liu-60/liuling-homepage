@@ -64,21 +64,3 @@ html[data-motion="reduced"] :is(.nav-link,.project,.stack-item,.experience-item,
 .glitter-background{opacity:.7}
 .horizon-footer{overflow:visible;border-radius:0}
 .horizon-effect{left:var(--horizon-left,0px);right:auto;width:var(--horizon-width,100%);overflow:hidden;border-radius:0}
-
-/* The footer starts with a soft, shaped deformation; hovering resolves it into
-   a restrained accent border without changing the content layout. */
-@keyframes horizon-deform{
-  0%{opacity:.25;transform:translate3d(0,12px,0) scaleX(.82) scaleY(.72);filter:blur(12px)}
-  48%{opacity:.9;transform:translate3d(0,-2px,0) scaleX(1.04) scaleY(1.04);filter:blur(2px)}
-  100%{opacity:1;transform:none;filter:none}
-}
-.horizon-effect::before{content:"";position:absolute;inset:-16% -8% -46%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 74%,rgba(255,232,188,.62) 0,rgba(255,157,98,.3) 8%,rgba(255,113,61,.13) 22%,transparent 49%);transform-origin:50% 72%;opacity:.25;transform:translate3d(0,12px,0) scaleX(.82) scaleY(.72);filter:blur(12px)}
-.horizon-footer.is-in-view .horizon-effect::before{animation:horizon-deform 920ms var(--ease) both}
-.horizon-effect::after{content:"";position:absolute;inset:18px 24px;z-index:3;pointer-events:none;border:1px solid transparent;border-radius:16px;transition:border-color 260ms var(--ease),box-shadow 260ms var(--ease)}
-.horizon-footer:hover .horizon-effect::after{border-color:rgba(255,113,61,.75);box-shadow:0 0 0 1px rgba(255,113,61,.12)}
-.project,.stack-item,.experience-item,.case-fact,.qualification{border:1px solid transparent}
-.project{transition:background-color 240ms var(--ease),transform 240ms var(--ease),border-color 260ms var(--ease)}
-.stack-item,.experience-item,.case-fact,.qualification{transition:background-color 220ms var(--ease),transform 220ms var(--ease),border-color 260ms var(--ease)}
-@media(hover:hover){
-  .project:hover,.stack-item:hover,.experience-item:hover,.case-fact:hover,.qualification:hover{border-color:rgba(255,113,61,.5)}
-}
