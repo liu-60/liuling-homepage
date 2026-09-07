@@ -1,5 +1,11 @@
 # V4 local acceptance
 
+## Motion visibility fix
+
+The acceptance browser reported `prefers-reduced-motion: reduce`, so the original global guard correctly but invisibly disabled all effects (zero canvases, no runtime errors). A visible Motion On/Off control now shares one effective preference across JS and CSS. System preference remains the default; explicit site choices persist across pages and reloads. Storage failures fall back to an in-memory choice. No browser or OS preference is modified.
+
+Regression coverage: 16 tests pass, including system default changes, explicit override persistence, and storage failures. In the actual reduced-motion browser, enabling effects created visible canvases; Fluid Text returned changing nonzero pixel samples with WebGL error 0; Glitter Wrap produced four distinct pixel sums across nine sampled frames; module opacity changed while scrolling; Beyond Horizon reached its first successful frame. Turning effects off removed all canvases.
+
 - `pnpm test`: 13 passing tests covering safe rendering, links, independent documents, and scroll visibility math.
 - `pnpm build`: TypeScript and Vite production build pass; 9 HTML documents emitted.
 - Browser checks at 320, 390, 768, 1024 and 1440 px: no horizontal overflow. Desktop profile remains at y=32 after scrolling; mobile profile is relative.

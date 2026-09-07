@@ -1,5 +1,6 @@
 // No animation loop at rest: pointer/scroll updates share at most one pending frame each.
-export function setupPointer(reducedMotion: MediaQueryList) {
+import type { MotionPreference } from './motion-preference.ts';
+export function setupPointer(reducedMotion: MotionPreference) {
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const cursor = document.querySelector<HTMLElement>('.custom-cursor')!;
   const root = document.documentElement;

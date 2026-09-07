@@ -1,6 +1,7 @@
 import { setupPointer, setupScrollProgress } from './pointer.ts';
 import { setupModuleMotion } from './scroll-motion.ts';
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+import { setupMotionPreference } from './motion-preference.ts';
+const reducedMotion = setupMotionPreference();
 setupPointer(reducedMotion);
 setupScrollProgress();
 setupModuleMotion(reducedMotion);
@@ -8,7 +9,7 @@ let effectsStarted = false;
 function loadEffects() {
   if (effectsStarted || reducedMotion.matches) return;
   effectsStarted = true;
-  import('./effects.tsx').then(module => module.setupEffects()).catch(() => { effectsStarted = false; });
+  import('./effects.tsx').then(module => module.setupEffects(reducedMotion)).catch(() => { effectsStarted = false; });
 }
 if ('requestIdleCallback' in window) window.requestIdleCallback(loadEffects,{timeout:1200});
 else setTimeout(loadEffects,700);
@@ -44,8 +45,8 @@ const countObserver = new IntersectionObserver((entries) => {
   });
 });
 document.querySelectorAll('[data-count]').forEach((element) => countObserver.observe(element));
-reducedMotion.addEventListener('change', (event) => {
-  if (event.matches) document.getAnimations().forEach((animation) => {if(Number.isFinite(animation.effect?.getComputedTiming().endTime)) animation.finish();else animation.cancel()});
+reducedMotion.addEventListener('change', () => {
+  if (reducedMotion.matches) document.getAnimations().forEach((animation) => {if(Number.isFinite(animation.effect?.getComputedTiming().endTime)) animation.finish();else animation.cancel()});
 });
 const shell = document.querySelector<HTMLElement>('.page-shell')!;
 const profileCard = document.querySelector<HTMLElement>('.profile-card')!;

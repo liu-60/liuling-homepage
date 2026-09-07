@@ -2,10 +2,10 @@ import { h, render, type ComponentType } from 'preact';
 import FluidText from './components/originkit/ui/fluid-text';
 import BeyondHorizon from './components/originkit/ui/beyond-horizon';
 import GlitterWrap from './components/originkit/ui/glitterwrap';
+import type { MotionPreference } from './motion-preference.ts';
 
 // The original Originkit shaders/particle renderer run as small, lazy Preact islands.
-export function setupEffects() {
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+export function setupEffects(reduced: MotionPreference) {
   const roots: {host:HTMLElement; visible:boolean; active:boolean; failed:boolean; component:ComponentType<any>; props:()=>Record<string,unknown>}[] = [];
   function sync() {
     for (const root of roots) {
