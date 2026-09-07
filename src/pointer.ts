@@ -21,7 +21,6 @@ export function setupPointer(reducedMotion: MotionPreference) {
     frame = requestAnimationFrame(() => {
       frame = 0;
       cursor.style.transform = `translate3d(${x - 5}px,${y - 3}px,0)`;
-      cursor.classList.toggle('is-link', !!target?.closest('a,button,summary'));
       root.classList.add('cursor-ready');
     });
   };

@@ -23,9 +23,7 @@ const entranceObserver = new IntersectionObserver((entries) => {
     const delay = Math.min(Number(element.style.getPropertyValue('--order') || 0) * 60, 180);
     const duration = element.classList.contains('project') ? 300 : element.dataset.motion === 'skill' ? 320 : 350;
     element.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}], {duration,delay,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});
-    if (element.dataset.motion === 'skill') {
-      element.querySelector('.stack-icon')?.animate([{opacity:0,transform:'scale(.94) rotate(-5deg)'},{opacity:1,transform:'scale(1) rotate(0)'}], {duration:320,delay:delay+40,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});
-    }
+
   });
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal,.about-socials').forEach((element) => entranceObserver.observe(element));

@@ -21,6 +21,6 @@ Keep salary, raw resumes and non-public work materials outside this directory. P
 
 ## Motion
 
-Originkit Fluid Text, Beyond Horizon and Glitter Wrap use their original shader/particle implementations with bounded rendering budgets. Effects load lazily and unmount offscreen, when the page is hidden, or under reduced motion. Fluid text stops after pointer inactivity. Semantic text and a static footer gradient remain as fallbacks.
+Originkit Fluid Text, Beyond Horizon and Glitter Wrap use their original shader/particle implementations with bounded rendering budgets. Motion is always enabled per the owner's explicit request, without a switch or stored/system preference. Effects load lazily and unmount offscreen or when the page is hidden. Fluid text stops after pointer inactivity. Semantic text and a static footer gradient remain as fallbacks.
 
-Desktop keeps the profile fixed; right-side modules fade at viewport edges. Touch layouts use a normal-flow profile. Hoverable items brighten and lift slightly. The custom cursor is restricted to fine pointers and yields to keyboard use and reduced motion. See `docs/originkit-integration.md` and `docs/acceptance-v4.md`.
+Desktop keeps the profile fixed; right-side modules fade at viewport edges. Touch layouts use a normal-flow profile. Cards brighten and lift with consistent padding; headings keep a transparent background. The fine-pointer cursor keeps the same arrow over links and yields to keyboard use. Skill tiles combine the white square and mark into one SVG background, regenerated with `node scripts/build-skill-tiles.mjs`; only the parent card moves. See `docs/acceptance-v4.md` for current behavior and historical checks.

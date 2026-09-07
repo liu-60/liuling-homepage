@@ -1,5 +1,11 @@
 # V4 local acceptance
 
+## Latest owner-requested interaction refinement
+
+Motion is now always enabled, as explicitly requested; the earlier switch and system/storage preference are superseded. Hidden-page and offscreen rendering limits still apply. Link hovering keeps the original arrow cursor. Section headings remain transparent on hover.
+
+All 12 skill/software marks now use self-contained SVG background tiles combining the white rounded square with the original local brand image. `node scripts/build-skill-tiles.mjs` regenerates them. The card moves as one unit; separate icon rotation/scale animations are removed. Cards receive consistent internal padding and gaps; small screens use one skill column. 15 regression tests pass, including complete tile assets and removal of the motion switch/link cursor morph.
+
 ## Motion visibility fix
 
 The acceptance browser reported `prefers-reduced-motion: reduce`, so the original global guard correctly but invisibly disabled all effects (zero canvases, no runtime errors). A visible Motion On/Off control now shares one effective preference across JS and CSS. System preference remains the default; explicit site choices persist across pages and reloads. Storage failures fall back to an in-memory choice. No browser or OS preference is modified.

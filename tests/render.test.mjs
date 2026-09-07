@@ -53,8 +53,15 @@ test('email rail requires an explicit safe public address', () => {
 test('all portrait and brand assets exist locally and favicon is genuine ICO', () => {
   const html = Object.values(renderPage()).join('');
   const images = [...html.matchAll(/src="(\/[^" ]+)"/g)].map(match=>match[1]);
-  assert.equal(images.length, 11);
+  assert.equal(images.length, 1);
   images.forEach(path=>assert.ok(existsSync(new URL(`../public${path}`, import.meta.url)), path));
+  const tiles=[...html.matchAll(/background-image:url\('(\/brands\/tiles\/[^']+)'\)/g)].map(match=>match[1]);
+  assert.equal(tiles.length,12);
+  tiles.forEach(path=>{
+    const tile=readFileSync(new URL(`../public${path}`,import.meta.url),'utf8');
+    assert.match(tile,/<rect[^>]+fill="#fff"/);
+    assert.match(tile,/<image[^>]+href="data:image\//);
+  });
   assert.deepEqual([...readFileSync(new URL('../public/favicon.ico',import.meta.url)).subarray(0,4)], [0,0,1,0]);
   assert.equal(renderPage().CONTACT, '');
 });
