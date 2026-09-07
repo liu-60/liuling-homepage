@@ -2,7 +2,7 @@ import type { MotionPreference } from './motion-preference.ts';
 export function moduleVisibility(top: number, bottom: number, viewport: number) {
   const edge = Math.min(160,viewport * .18);
   const opacity = Math.max(0,Math.min(1,(viewport-top)/edge,bottom/edge));
-  return {opacity,offset:(1-opacity)*8*(top>viewport/2?1:-1)};
+  return {opacity,offset:(1-opacity)*44*(top>viewport/2?1:-1)};
 }
 
 export function setupModuleMotion(reduced: MotionPreference) {

@@ -57,3 +57,10 @@ html[data-motion="reduced"] :is(.nav-link,.project,.stack-item,.experience-item,
 .tool-arrow{right:12px;top:12px}.software-item{padding-right:27px}
 @media(hover:hover){.stack-item:hover{transform:translate3d(0,-3px,0)}.software-item:hover .stack-icon{transform:none}.section-page-link:hover{background:transparent}}
 @media(max-width:599px){.stack-grid{gap:12px;grid-template-columns:1fr}.stack-item{padding:16px;gap:16px}.software-item{padding-right:30px}.stack-item :is(h2,h3),.software-item :is(h2,h3){font-size:17px}.stack-item p,.software-item p{font-size:11px}.tool-arrow{display:block}.project-summary{padding:16px 12px}.experience-item,.experience-item:first-child{padding:22px 16px}.qualification{padding:20px 16px}}
+
+/* Refined exit choreography and full-width sunrise. */
+.project{transition:background-color 240ms var(--ease),transform 240ms var(--ease)}
+.nav-link:hover,.nav-link:hover>.icon{transform:none}
+.glitter-background{opacity:.7}
+.horizon-footer{overflow:visible;border-radius:0}
+.horizon-effect{left:var(--horizon-left,0px);right:auto;width:var(--horizon-width,100%);overflow:hidden;border-radius:0}

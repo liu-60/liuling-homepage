@@ -1,5 +1,14 @@
 # V4 local acceptance
 
+## Full-width sunrise and hover refinement
+
+- Navigation and its glyph keep transform `none` on hover. Work cards transition background and transform over 240 ms.
+- Modules slide up/down by up to 44 px as they leave the viewport; midpoint exit offset is regression-tested in both directions.
+- Glitter particle size increases from 7 to 10.5 (+50%); brightness increases from 65 to 90 and layer opacity from .48 to .7.
+- Sunrise spans the actual viewport width (desktop 1425 px and mobile-width 375 px verified, left 0, no horizontal overflow). Profile card stays above it at z-index 3.
+- Fine-pointer devices mount the sunrise on region entry and unmount it on leave: zero canvas before entry, successful shader frame after entry, zero after leave verified. Coarse-pointer devices use viewport entry instead of requiring hover.
+- Xiaohongshu uses a readable Chinese wordmark in the existing social color. Console has no warnings/errors. 15 tests and production build pass.
+
 ## Latest owner-requested interaction refinement
 
 Motion is now always enabled, as explicitly requested; the earlier switch and system/storage preference are superseded. Hidden-page and offscreen rendering limits still apply. Link hovering keeps the original arrow cursor. Section headings remain transparent on hover.

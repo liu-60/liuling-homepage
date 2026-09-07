@@ -32,5 +32,7 @@ test('module fades symmetrically at viewport edges and stays readable in the mid
   assert.equal(moduleVisibility(-700,0,900).opacity,0);
   assert.equal(moduleVisibility(-200,1800,900).opacity,1);
   assert.equal(moduleVisibility(820,1100,900).opacity,.5);
+  assert.equal(moduleVisibility(820,1100,900).offset,22);
+  assert.equal(moduleVisibility(-300,80,900).offset,-22);
   assert.equal(moduleVisibility(-300,80,900).opacity,.5);
 });

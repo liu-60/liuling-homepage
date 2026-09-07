@@ -6,10 +6,10 @@ import type { MotionPreference } from './motion-preference.ts';
 
 // The original Originkit shaders/particle renderer run as small, lazy Preact islands.
 export function setupEffects(reduced: MotionPreference) {
-  const roots: {host:HTMLElement; visible:boolean; active:boolean; failed:boolean; component:ComponentType<any>; props:()=>Record<string,unknown>}[] = [];
+  const roots: {host:HTMLElement; visible:boolean; active:boolean; failed:boolean; enabled:boolean; component:ComponentType<any>; props:()=>Record<string,unknown>}[] = [];
   function sync() {
     for (const root of roots) {
-      const active = root.visible && !document.hidden && !reduced.matches && !root.failed;
+      const active = root.visible && root.enabled && !document.hidden && !reduced.matches && !root.failed;
       if (active === root.active) continue;
       root.active = active;
       if (active) render(h(root.component, root.props()), root.host);
@@ -23,8 +23,8 @@ export function setupEffects(reduced: MotionPreference) {
     }
     sync();
   },{threshold:0});
-  function register(host: HTMLElement, component: ComponentType<any>, props: ()=>Record<string,unknown>) {
-    const root = {host,component,props,visible:false,active:false,failed:false};
+  function register(host: HTMLElement, component: ComponentType<any>, props: ()=>Record<string,unknown>, enabled = true) {
+    const root = {host,component,props,visible:false,active:false,failed:false,enabled};
     roots.push(root);
     host.addEventListener('webglcontextlost', () => {
       if (!root.active) return;
@@ -35,9 +35,16 @@ export function setupEffects(reduced: MotionPreference) {
     return root;
   }
   const background = document.querySelector<HTMLElement>('.glitter-background');
-  if (background) register(background,GlitterWrap,()=>({particleCount:innerWidth<600?60:120,color1:'#ddd5c5',color2:'#ff713d',color3:'#ceff39',speed:1.3,density:35,starSize:7,focalDepth:13,turbulence:.4,brightness:65,glitterIntensity:1,trailAmount:25,reverse:false}));
+  if (background) register(background,GlitterWrap,()=>({particleCount:innerWidth<600?60:120,color1:'#ddd5c5',color2:'#ff713d',color3:'#ceff39',speed:1.3,density:35,starSize:10.5,focalDepth:13,turbulence:.4,brightness:90,glitterIntensity:1,trailAmount:25,reverse:false}));
   const horizon = document.querySelector<HTMLElement>('.horizon-effect');
-  if (horizon) register(horizon,BeyondHorizon,()=>({background:'#151413',coreColor:'#fff8ed',midColor:'#ff9d62',deepColor:'#643923',brightness:1.7,speed:.5,parallax:2,style:{minWidth:0,minHeight:0}}));
+  if (horizon) {
+    const hover = matchMedia('(hover: hover) and (pointer: fine)');
+    const root = register(horizon,BeyondHorizon,()=>({background:'#151413',coreColor:'#fff8ed',midColor:'#ff9d62',deepColor:'#643923',brightness:1.7,speed:.5,parallax:2,style:{minWidth:0,minHeight:0}}),!hover.matches);
+    const region = horizon.parentElement!;
+    region.addEventListener('pointerenter',()=>{root.enabled=true;sync()});
+    region.addEventListener('pointerleave',()=>{if(hover.matches){root.enabled=false;sync()}});
+    hover.addEventListener('change',()=>{root.enabled=!hover.matches;sync()});
+  }
 
   // Keep the actual DOM letters under the transparent fluid overlay. They are
   // selectable, indexed, accessible, and remain intact on every fallback path.

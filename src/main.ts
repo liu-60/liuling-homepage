@@ -50,6 +50,8 @@ const shell = document.querySelector<HTMLElement>('.page-shell')!;
 const profileCard = document.querySelector<HTMLElement>('.profile-card')!;
 const floating = document.querySelector<HTMLElement>('.floating-actions')!;
 function updateLayout() {
+  const horizon=document.querySelector<HTMLElement>('.horizon-footer');
+  if(horizon){horizon.style.setProperty('--horizon-left',`${-horizon.getBoundingClientRect().left}px`);horizon.style.setProperty('--horizon-width',`${document.documentElement.clientWidth}px`)}
   const rightGutter = window.innerWidth - shell.getBoundingClientRect().right;
   floating.classList.toggle('is-floating', rightGutter >= 168 && window.innerWidth >= 1024);
 
