@@ -417,7 +417,9 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
 
   // Pointer state lives in a ref, not state: a moving pointer must not re-render
   // React 60x a second just to move a uniform.
-  const pointer = useRef({ tx: 0, ty: 0, x: 0, y: 0, thover: 0, hover: 0 })
+  const restingHover = 0.18
+  const pointer = useRef({ tx: 0, ty: 0, x: 0, y: 0, thover: restingHover, hover: restingHover })
+  const wake = useRef<() => void>(() => {})
 
   const colors = useMemo(
     () => ({
@@ -553,7 +555,6 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
 
     let raf = 0
     let lastT = 0
-    let start = 0
 
     resize()
     // Paint before the first animation frame lands, so the element never
@@ -575,22 +576,29 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
     let lastFrame = 0
     const loop = (now: number) => {
       if (now - lastFrame < 1000 / 30) { raf = requestAnimationFrame(loop); return }
+      const dt = Math.min((now - lastFrame) / 1000, 0.05)
       lastFrame = now
-      if (!start) start = now
-      lastT = (now - start) / 1000
+      lastT += dt
       const p = pointer.current
       // Critically damped-ish easing; without it the parallax snaps and reads
       // as a glitch rather than as the scene leaning toward you.
-      p.x += (p.tx - p.x) * 0.06
-      p.y += (p.ty - p.y) * 0.06
-      p.hover += (p.thover - p.hover) * 0.05
+      const ease = 1 - Math.exp(-dt * 4.5)
+      p.x += (p.tx - p.x) * ease
+      p.y += (p.ty - p.y) * ease
+      p.hover += (p.thover - p.hover) * ease
       draw(lastT)
-      raf = requestAnimationFrame(loop)
+      const settling = Math.abs(p.thover-p.hover)+Math.abs(p.tx-p.x)+Math.abs(p.ty-p.y) > 0.001
+      raf = p.thover > restingHover || settling ? requestAnimationFrame(loop) : 0
     }
-    raf = requestAnimationFrame(loop)
+    // Keep the real resting frame. Pointer entry starts the same scene without
+    // replacing its canvas; exit settles back before suspending the RAF loop.
+    wake.current = () => {
+      if (!raf) { lastFrame = performance.now(); raf = requestAnimationFrame(loop) }
+    }
 
     return () => {
       cancelAnimationFrame(raf)
+      wake.current = () => {}
       ro?.disconnect()
       window.removeEventListener("resize", onResize)
       gl.deleteProgram(prog)
@@ -617,7 +625,8 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
       const p = pointer.current
       p.tx = 0
       p.ty = 0
-      p.thover = 0
+      p.thover = restingHover
+      wake.current()
     }
     window.addEventListener("pointerup", end)
     window.addEventListener("pointercancel", end)
@@ -647,7 +656,8 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
     const p = pointer.current
     p.tx = (e.clientX - r.left) / r.width - 0.5
     p.ty = (e.clientY - r.top) / r.height - 0.5
-    p.thover = 1
+    p.thover = 0.8
+    wake.current()
   }
 
   const onLeave = (e: PointerEvent) => {
@@ -655,16 +665,29 @@ export function BeyondHorizon(props: BeyondHorizonProps) {
     const p = pointer.current
     p.tx = 0
     p.ty = 0
-    p.thover = 0
+    p.thover = restingHover
+    wake.current()
   }
+
+  useEffect(() => {
+    const host = hostRef.current
+    if (!host) return
+    const region = host.closest('.horizon-footer') || host
+    region.addEventListener('pointermove', onMove as EventListener)
+    region.addEventListener('pointerenter', onMove as EventListener)
+    region.addEventListener('pointerdown', onMove as EventListener)
+    region.addEventListener('pointerleave', onLeave as EventListener)
+    return () => {
+      region.removeEventListener('pointermove', onMove as EventListener)
+      region.removeEventListener('pointerenter', onMove as EventListener)
+      region.removeEventListener('pointerdown', onMove as EventListener)
+      region.removeEventListener('pointerleave', onLeave as EventListener)
+    }
+  }, [])
 
   return (
     <div
       ref={hostRef}
-      onPointerMove={onMove}
-      onPointerEnter={onMove}
-      onPointerDown={onMove}
-      onPointerLeave={onLeave}
       style={{
         position: "relative",
         // Floor BEFORE the spread, so an explicit size on the instance still

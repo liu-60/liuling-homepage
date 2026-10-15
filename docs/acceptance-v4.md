@@ -1,5 +1,12 @@
 # V4 local acceptance
 
+## Resting sunrise and seamless footer blend (current)
+
+- Supersedes the hover mount/unmount behavior below: the visible footer immediately paints a raised sunrise, keeps the same canvas during pointer entry/exit, and pauses its animation loop after settling at rest.
+- Live WebGL uniform checks: resting hover 0.1800, hovered 0.79998, returned 0.18058; canvas identity stayed unchanged. Pointer events cover the entire footer including its CTA.
+- A transparent top mask blends the glow into the page background. Desktop and mobile screenshots verified the raised initial sun and soft upper edge; mobile client/scroll widths both measured 375 px.
+- Production build and all 15 existing tests pass. These checks concern the local preview; they do not establish an updated public deployment.
+
 ## Full-width sunrise and hover refinement
 
 - Navigation and its glyph keep transform `none` on hover. Work cards transition background and transform over 240 ms.

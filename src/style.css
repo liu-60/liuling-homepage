@@ -64,3 +64,5 @@ html[data-motion="reduced"] :is(.nav-link,.project,.stack-item,.experience-item,
 .glitter-background{opacity:.7}
 .horizon-footer{overflow:visible;border-radius:0}
 .horizon-effect{left:var(--horizon-left,0px);right:auto;width:var(--horizon-width,100%);overflow:hidden;border-radius:0}
+.horizon-effect{mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.08) 12%,rgba(0,0,0,.45) 28%,#000 48%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.08) 12%,rgba(0,0,0,.45) 28%,#000 48%)}
+.horizon-effect canvas{transition:opacity 450ms var(--ease)}

@@ -38,12 +38,7 @@ export function setupEffects(reduced: MotionPreference) {
   if (background) register(background,GlitterWrap,()=>({particleCount:innerWidth<600?60:120,color1:'#ddd5c5',color2:'#ff713d',color3:'#ceff39',speed:1.3,density:35,starSize:10.5,focalDepth:13,turbulence:.4,brightness:90,glitterIntensity:1,trailAmount:25,reverse:false}));
   const horizon = document.querySelector<HTMLElement>('.horizon-effect');
   if (horizon) {
-    const hover = matchMedia('(hover: hover) and (pointer: fine)');
-    const root = register(horizon,BeyondHorizon,()=>({background:'#151413',coreColor:'#fff8ed',midColor:'#ff9d62',deepColor:'#643923',brightness:1.7,speed:.5,parallax:2,style:{minWidth:0,minHeight:0}}),!hover.matches);
-    const region = horizon.parentElement!;
-    region.addEventListener('pointerenter',()=>{root.enabled=true;sync()});
-    region.addEventListener('pointerleave',()=>{if(hover.matches){root.enabled=false;sync()}});
-    hover.addEventListener('change',()=>{root.enabled=!hover.matches;sync()});
+    register(horizon,BeyondHorizon,()=>({background:'#151413',coreColor:'#fff8ed',midColor:'#ff9d62',deepColor:'#643923',brightness:1.7,coreSize:.032,coreHover:.045,speed:.5,parallax:1.2,style:{minWidth:0,minHeight:0}}));
   }
 
   // Keep the actual DOM letters under the transparent fluid overlay. They are
