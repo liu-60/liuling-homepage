@@ -4,6 +4,7 @@ import { pageDocument, pagePaths } from './src/pages.ts';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 export default defineConfig({
+  base: process.env.PAGES_BASE_PATH || '/',
   resolve: { alias: [{find:/^react$/,replacement:'preact/compat'}, {find:/^react\/jsx-runtime$/,replacement:'preact/jsx-runtime'}] },
   plugins: [{
     name: 'static-portfolio-content',

@@ -1,0 +1,50 @@
+name: Deploy GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          PAGES_BASE_PATH: /liuling-homepage/
+      - name: Adapt static page links to repository path
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          base = '/liuling-homepage/'
+          pattern = re.compile(r'''((?:href|src)=["']|url\(["']?)(/(?!/)[^"'\s)>]*)''')
+          for page in Path('dist').rglob('*.html'):
+              html = page.read_text()
+              html = pattern.sub(lambda m: m[1] + (m[2] if m[2].startswith(base) else base + m[2][1:]), html)
+              page.write_text(html)
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
